@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import CustomInput from "./CustomInput";
 
 // Update schema to include password validation
 const formSchema = z.object({
@@ -80,50 +81,20 @@ const AuthForm = ({ type }: { type: string }) => {
         <>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-
-
-
               {/* Email Input */}
-              <FormField
+              <CustomInput
                 control={form.control}
                 name="email"
-                render={({ field }) => (
-                  <div className="form-item">
-                    <FormLabel className="form-label">Email</FormLabel>
-                    <div className="flex w-full flex-col">
-                      <FormControl>
-                        <Input
-                          placeholder="Enter Your Email"
-                          className="input-class"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage className="form-message" />
-                    </div>
-                  </div>
-                )}
+                label="Email"
+                placeholder="Enter Your Email"
               />
 
               {/* Password Input */}
-              <FormField
+              <CustomInput
                 control={form.control}
                 name="password"
-                render={({ field }) => (
-                  <div className="form-item">
-                    <FormLabel className="form-label">Password</FormLabel>
-                    <div className="flex w-full flex-col">
-                      <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="Enter Your Password"
-                          className="input-class"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage className="form-message" />
-                    </div>
-                  </div>
-                )}
+                label="Password"
+                placeholder="Enter Your password"
               />
               <div className="flex flex-col gap-4">
                 <Button type="submit" disabled={isLoading} className="form-btn">
