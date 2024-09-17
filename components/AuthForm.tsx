@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
 
 // Update schema to include password validation
 const formSchema = z.object({
@@ -28,6 +29,7 @@ const formSchema = z.object({
 
 const AuthForm = ({ type }: { type: string }) => {
   const [user, setUser] = useState(null);
+  const [isLoading, setisLoading] = useState(false);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,7 +44,9 @@ const AuthForm = ({ type }: { type: string }) => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    setisLoading(true);
     console.log(values);
+    setisLoading(false);
   }
 
   return (
@@ -76,6 +80,9 @@ const AuthForm = ({ type }: { type: string }) => {
         <>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+
+
+
               {/* Email Input */}
               <FormField
                 control={form.control}
@@ -118,10 +125,37 @@ const AuthForm = ({ type }: { type: string }) => {
                   </div>
                 )}
               />
-
-              <Button type="submit">Submit</Button>
+              <div className="flex flex-col gap-4">
+                <Button type="submit" disabled={isLoading} className="form-btn">
+                  {" "}
+                  {isLoading ? (
+                    <>
+                      <Loader2 size={20} className="animate-spin" /> &nbsp;
+                      Loading...
+                    </>
+                  ) : type === "sign-in" ? (
+                    "Sign in"
+                  ) : (
+                    "Sign Up"
+                  )}{" "}
+                </Button>
+              </div>
             </form>
           </Form>
+
+          <footer className="flex justify-center gap-1">
+            <p className="text-14 font-normal text-gray-600">
+              {type === "sign-in"
+                ? "Don't Have An Account?"
+                : "Already Have an Account"}
+            </p>
+            <Link
+              href={type === "sign-in" ? "/sign-up" : "/sign-in"}
+              className="form-link"
+            >
+              {type === "sign-in" ? "Sign Up" : "Sign In"}
+            </Link>
+          </footer>
         </>
       )}
     </section>
