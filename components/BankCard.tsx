@@ -2,6 +2,7 @@ import { formatAmount } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { getLoggedInUser } from "@/lib/actions/user.actions";
 
 const BankCard = ({
   account,

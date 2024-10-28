@@ -21,8 +21,8 @@ import { Loader2 } from "lucide-react";
 import CustomInput from "./CustomInput";
 import { authFormSchema } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { getLoggedInUser, signUp } from "@/lib/actions/user.actions";
-import { signIn } from "@/lib/actions/user.actions";
+import { getLoggedInUser, signIn, signUp } from "@/lib/actions/user.actions";
+
 
 // Update schema to include password validation
 // const authFormSchema = z.object({
@@ -36,9 +36,8 @@ const AuthForm = ({ type }: { type: string }) => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [isLoading, setisLoading] = useState(false);
- 
   
-
+  
   const formSchema = authFormSchema(type);
 
   // 1. Define your form.

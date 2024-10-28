@@ -1,67 +1,73 @@
-'use server';
+"use server";
 
 import { ID } from "node-appwrite";
 import { createAdminClient, createSessionClient } from "../appwrite";
 import { cookies } from "next/headers";
 import { parseStringify } from "../utils";
+import { User } from "lucide-react";
 
-export const signIn = async ({ email, password }: signInProps ) => {
-     try {
-      const { account } = await createAdminClient();
+export const signIn = async ({ email, password }: signInProps) => {
+  try {
+    const { account } = await createAdminClient();
 
-      const response = await account.createEmailPasswordSession(email, password);
+    const response = await account.createEmailPasswordSession(email, password);
 
-      return parseStringify(response);
-     } catch (error) {
-        console.error('Error', error);
-     }
-}
+    return parseStringify(response);
+  } catch (error) {
+    console.error("Error", error);
+  }
+};
+
 export const signUp = async (userData: SignUpParams) => {
-   const { email, password, firstName, lastName } = userData;
+  const { email, password, firstName, lastName } = userData;
 
-     try {
-      const { account } = await createAdminClient();
+  try {
+    const { account } = await createAdminClient();
 
-      // Create the email password session
-      const newUserAccount = await account.create(ID.unique(), email, password, `${firstName} ${lastName}`);
-      
-      const session = await account.createEmailPasswordSession(email, password);
-    
-      // Set the session cookie
-      cookies().set("appwrite-session", session.secret, {
-        path: "/",
-        httpOnly: true,
-        sameSite: "strict",
-        secure: true,
-      });
+    // Create the email password session
+    const newUserAccount = await account.create(
+      ID.unique(),
+      email,
+      password,
+      `${firstName} ${lastName}`
+    );
 
-      return parseStringify(newUserAccount);
-     } catch (error) {
-        console.error('Error', error);
-     }
-}
+    const session = await account.createEmailPasswordSession(email, password);
+
+    // Set the session cookie
+    cookies().set("appwrite-session", session.secret, {
+      path: "/",
+      httpOnly: true,
+      sameSite: "strict",
+      secure: true,
+    });
+
+    return parseStringify(newUserAccount);
+  } catch (error) {
+    console.error("Error", error);
+  }
+};
 
 export async function getLoggedInUser() {
-   try {
-      const { account } = await createSessionClient();
-      
-      const user =  await account.get();
-
-      return parseStringify(user);
-   } catch (error) {
-      console.log(error)
-      return null;   
-   }
+  try {
+    const { account } = await createSessionClient();
+    const user = await account.get();
+    
+    return parseStringify(user);
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }
 
-export const  logoutAccount = async () => {
-   try {
-         const { account } = await createSessionClient();
+export const logoutAccount = async () => {
+  try {
+    const { account } = await createSessionClient();
 
-         cookies().delete('appwrite-session');
+    cookies().delete("appwrite-session");
 
-         await account.deleteSession('current'); 
-   } catch (error) {
-      return null;
-   }
-}
+    await account.deleteSession("current");
+  } catch (error) {
+    return null;
+  }
+};
